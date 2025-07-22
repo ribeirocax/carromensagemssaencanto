@@ -1,5 +1,71 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Gift, Baby, Sparkles, MessageCircle, Phone, MapPin, Clock, Star, Users, Music, Camera } from 'lucide-react';
+import { Heart, Gift, Baby, Sparkles, MessageCircle, Phone, MapPin, Clock, Star, Users, Music, Camera, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const Carousel = ({ images }: { images: string[] }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((current) => (current + 1) % images.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  const goToPrevious = () => {
+    setCurrentIndex((current) => (current - 1 + images.length) % images.length);
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((current) => (current + 1) % images.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  return (
+    <div className="relative w-full max-w-4xl mx-auto mb-12">
+      <div className="aspect-[16/9] overflow-hidden rounded-2xl shadow-xl">
+        <img
+          src={images[currentIndex]}
+          alt={`Carro de mensagem ${currentIndex + 1}`}
+          className="w-full h-full object-cover transition-opacity duration-500"
+          onError={(e) => {
+            console.error('Error loading image:', e.currentTarget.src);
+          }}
+        />
+      </div>
+
+      {/* Navigation Buttons */}
+      <button
+        onClick={goToPrevious}
+        className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-colors"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+      <button
+        onClick={goToNext}
+        className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-colors"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
+
+      {/* Indicators */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-3 h-3 rounded-full transition-all ${
+              index === currentIndex ? 'bg-white w-6' : 'bg-white/50'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 function App() {
   const [isVisible, setIsVisible] = useState(false);
@@ -76,6 +142,14 @@ function App() {
   const whatsappMessage = "Olá! Gostaria de agendar um Carro de Mensagem ao Vivo. Podem me ajudar?";
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
+  // Images for the carousel
+  const carouselImages = [
+    "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    "https://images.unsplash.com/photo-1464207687429-7505649dae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80",
+    "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -108,18 +182,8 @@ function App() {
               Surpreenda alguém especial com Carro de Mensagem AO VIVO! 💖
             </h2>
             
-            {/* Hero Image Placeholder */}
-            <div className="max-w-4xl mx-auto mb-12">
-              <div className="bg-gradient-to-r from-pink-200 to-purple-200 rounded-2xl p-8 shadow-xl">
-                <div className="bg-white rounded-xl p-6 text-gray-600">
-                  <Camera className="w-16 h-16 mx-auto mb-4 text-pink-500" />
-                  <p className="text-lg font-medium">
-                    Imagem: Carro decorado com balões coloridos, faixas e alto-falante, 
-                    com uma pessoa sorridente ao lado, transmitindo alegria e emoção
-                  </p>
-                </div>
-              </div>
-            </div>
+            {/* Hero Image Carousel */}
+            <Carousel images={carouselImages} />
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a
