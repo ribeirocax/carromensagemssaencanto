@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/heart.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,9 +11,546 @@
     <meta property="og:title" content="Encanto Mensagem - Carro de Mensagem ao Vivo" />
     <meta property="og:description" content="Surpreenda alguém especial com nosso serviço de Carro de Mensagem ao Vivo em Salvador!" />
     <meta property="og:type" content="website" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {}
+            }
+        }
+    </script>
+    <style>
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 64rem;
+            margin: 0 auto 3rem;
+        }
+        
+        .carousel-wrapper {
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.5s ease-in-out;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .carousel-image.active {
+            opacity: 1;
+        }
+        
+        .carousel-image.inactive {
+            opacity: 0;
+        }
+        
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .carousel-nav:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        .carousel-nav.prev {
+            left: 1rem;
+        }
+        
+        .carousel-nav.next {
+            right: 1rem;
+        }
+        
+        .carousel-indicators {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .carousel-indicator {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .carousel-indicator.active {
+            background: white;
+            width: 1.5rem;
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(2.5rem); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-pink-600 to-purple-600 text-white py-4 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <svg class="w-8 h-8 text-pink-200" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <h1 class="text-2xl font-bold">Encanto Mensagem</h1>
+            </div>
+            <a href="https://wa.me/5571988683344?text=Olá!%20Gostaria%20de%20agendar%20um%20Carro%20de%20Mensagem%20ao%20Vivo.%20Podem%20me%20ajudar?" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="bg-green-500 hover:bg-green-600 px-6 py-2 rounded-full font-semibold transition-colors flex items-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                Agendar Agora
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-pink-50 to-purple-50 py-20">
+        <div class="container mx-auto px-4 text-center">
+            <div class="fade-in">
+                <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
+                    Encanto Mensagem
+                </h1>
+                <h2 class="text-2xl md:text-3xl text-pink-600 mb-8 font-semibold">
+                    Surpreenda alguém especial com Carro de Mensagem AO VIVO! 💖
+                </h2>
+                
+                <!-- Carousel -->
+                <div class="carousel-container">
+                    <div class="carousel-wrapper">
+                        <img src="/smart.jpg" alt="Carro de mensagem 1" class="carousel-image active" data-index="0">
+                        <img src="/depoimento.jpg" alt="Carro de mensagem 2" class="carousel-image inactive" data-index="1">
+                        <img src="/aniversário.png" alt="Carro de mensagem 3" class="carousel-image inactive" data-index="2">
+                        <img src="/CARRO_entanto_mensagem2 copy.png" alt="Carro de mensagem 4" class="carousel-image inactive" data-index="3">
+                    </div>
+                    
+                    <button class="carousel-nav prev" onclick="previousSlide()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-nav next" onclick="nextSlide()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                    
+                    <div class="carousel-indicators">
+                        <button class="carousel-indicator active" onclick="goToSlide(0)"></button>
+                        <button class="carousel-indicator" onclick="goToSlide(1)"></button>
+                        <button class="carousel-indicator" onclick="goToSlide(2)"></button>
+                        <button class="carousel-indicator" onclick="goToSlide(3)"></button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="https://wa.me/5571988683344?text=Olá!%20Gostaria%20de%20agendar%20um%20Carro%20de%20Mensagem%20ao%20Vivo.%20Podem%20me%20ajudar?"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-xl font-bold transition-all transform hover:scale-105 shadow-lg flex items-center gap-3">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        Agendar Minha Surpresa
+                    </a>
+                    <div class="flex items-center gap-2 text-gray-600">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        <span class="font-semibold">(71) 98868-3344</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is the service -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl font-bold text-gray-800 mb-8">
+                    O que é o Carro de Mensagem ao Vivo?
+                </h2>
+                <div class="text-lg text-gray-600 leading-relaxed space-y-6">
+                    <p>
+                        Imagine a emoção de ver alguém especial receber uma mensagem cantada e falada 
+                        especialmente para ela, diretamente na porta de casa ou no local que você escolher!
+                    </p>
+                    <p>
+                        Nosso <strong class="text-pink-600">Carro de Mensagem ao Vivo</strong> é um serviço único que leva 
+                        alegria, surpresa e emoção até a pessoa amada. Com um carro decorado, música, 
+                        microfone e muito carinho, criamos momentos que ficam para sempre na memória.
+                    </p>
+                    <p class="text-pink-600 font-semibold text-xl">
+                        É mais que uma mensagem, é uma experiência inesquecível! ✨
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Occasions -->
+    <section class="py-20 bg-gradient-to-br from-pink-50 to-purple-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-16">
+                Para quais momentos é perfeita?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-2 text-center">
+                    <div class="text-pink-500 mb-4 flex justify-center">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Aniversário</h3>
+                    <p class="text-gray-600">Torne o dia especial ainda mais memorável</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-2 text-center">
+                    <div class="text-pink-500 mb-4 flex justify-center">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Romântica</h3>
+                    <p class="text-gray-600">Declare seu amor de forma única e emocionante</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-2 text-center">
+                    <div class="text-pink-500 mb-4 flex justify-center">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Chá Revelação</h3>
+                    <p class="text-gray-600">Compartilhe a grande novidade com estilo</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-2 text-center">
+                    <div class="text-pink-500 mb-4 flex justify-center">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M7 11H1v2h6v-2zm2.17-3.24L7.05 5.64 5.64 7.05l2.12 2.12 1.41-1.41zM13 1h-2v6h2V1zm5.36 6.05l-1.41-1.41-2.12 2.12 1.41 1.41 2.12-2.12zM17 11v2h6v-2h-6zm-5-2c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm2.83 7.24l2.12 2.12 1.41-1.41-2.12-2.12-1.41 1.41zm-9.19.71l1.41 1.41 2.12-2.12-1.41-1.41-2.12 2.12zM11 23h2v-6h-2v6z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Surpresa</h3>
+                    <p class="text-gray-600">Para qualquer momento que merece ser especial</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-16">
+                Por que escolher a Encanto Mensagem?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div class="flex items-start gap-4 p-6 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
+                    <div class="text-pink-500 mt-1">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Emoção ao Vivo</h3>
+                        <p class="text-gray-600">Mensagem cantada e falada na hora, criando um momento único e autêntico</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start gap-4 p-6 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
+                    <div class="text-pink-500 mt-1">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Totalmente Personalizada</h3>
+                        <p class="text-gray-600">Cada mensagem é criada especialmente para sua ocasião e pessoa especial</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start gap-4 p-6 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
+                    <div class="text-pink-500 mt-1">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Praticidade Total</h3>
+                        <p class="text-gray-600">Você agenda, nós cuidamos de tudo. Simples assim!</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start gap-4 p-6 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
+                    <div class="text-pink-500 mt-1">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Momentos Inesquecíveis</h3>
+                        <p class="text-gray-600">Criamos memórias que durarão para sempre no coração</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 bg-gradient-to-br from-pink-50 to-purple-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-16">
+                O que nossos clientes dizem
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-white rounded-2xl p-6 shadow-lg">
+                    <div class="flex mb-4">
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-gray-600 mb-4 italic">
+                        "Simplesmente perfeito! Minha filha ficou emocionada até as lágrimas. Foi o aniversário mais especial da vida dela!"
+                    </p>
+                    <p class="font-semibold text-gray-800">Maria Silva</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-lg">
+                    <div class="flex mb-4">
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-gray-600 mb-4 italic">
+                        "Surpreendi minha esposa no nosso aniversário de casamento. Ela não parava de chorar de emoção. Valeu cada centavo!"
+                    </p>
+                    <p class="font-semibold text-gray-800">João Santos</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-lg">
+                    <div class="flex mb-4">
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-gray-600 mb-4 italic">
+                        "O chá revelação ficou perfeito! Todos os convidados ficaram emocionados. Recomendo demais o serviço!"
+                    </p>
+                    <p class="font-semibold text-gray-800">Carla Oliveira</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="https://share.google/TmvgmtDU9VPA78raV"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center gap-3 bg-white hover:bg-gray-50 text-gray-800 px-8 py-4 rounded-full font-semibold shadow-lg transition-all transform hover:scale-105 border-2 border-gray-200">
+                    <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    Veja mais avaliações no Google
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-pink-600 to-purple-600 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6">
+                Pronto para criar um momento inesquecível?
+            </h2>
+            <p class="text-xl mb-8 opacity-90">
+                Entre em contato agora e vamos planejar a surpresa perfeita!
+            </p>
+            <a href="https://wa.me/5571988683344?text=Olá!%20Gostaria%20de%20agendar%20um%20Carro%20de%20Mensagem%20ao%20Vivo.%20Podem%20me%20ajudar?"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="bg-green-500 hover:bg-green-600 text-white px-10 py-5 rounded-full text-2xl font-bold transition-all transform hover:scale-105 shadow-lg inline-flex items-center gap-3">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                Falar no WhatsApp Agora
+            </a>
+        </div>
+    </section>
+
+    <!-- Contact Info -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">
+                Entre em Contato
+            </h2>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-8">
+                <div class="flex items-center gap-3">
+                    <svg class="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <div>
+                        <p class="font-semibold text-gray-800">WhatsApp</p>
+                        <p class="text-gray-600">(71) 98868-3344</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <svg class="w-6 h-6 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <div>
+                        <p class="font-semibold text-gray-800">Atendimento</p>
+                        <p class="text-gray-600">Salvador e Região</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <svg class="w-6 h-6 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span class="text-xl font-bold">Encanto Mensagem</span>
+            </div>
+            <p class="text-gray-400 mb-2">
+                Salvador, Bahia - Criando momentos inesquecíveis
+            </p>
+            <p class="text-gray-500 text-sm">
+                © 2024 Encanto Mensagem. Todos os direitos reservados.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Fixed WhatsApp Button -->
+    <a href="https://wa.me/5571988683344?text=Olá!%20Gostaria%20de%20agendar%20um%20Carro%20de%20Mensagem%20ao%20Vivo.%20Podem%20me%20ajudar?"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-all transform hover:scale-110 z-50 pulse-animation">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+    </a>
+
+    <script>
+        let currentSlide = 0;
+        const images = document.querySelectorAll('.carousel-image');
+        const indicators = document.querySelectorAll('.carousel-indicator');
+        const totalSlides = images.length;
+
+        function showSlide(index) {
+            // Hide all images
+            images.forEach(img => {
+                img.classList.remove('active');
+                img.classList.add('inactive');
+            });
+            
+            // Show current image
+            images[index].classList.remove('inactive');
+            images[index].classList.add('active');
+            
+            // Update indicators
+            indicators.forEach(indicator => indicator.classList.remove('active'));
+            indicators[index].classList.add('active');
+            
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            const next = (currentSlide + 1) % totalSlides;
+            showSlide(next);
+        }
+
+        function previousSlide() {
+            const prev = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(prev);
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+        }
+
+        // Auto-advance slides
+        setInterval(nextSlide, 4000);
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
 </html>
